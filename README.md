@@ -1,6 +1,6 @@
 # http-response-tester
 
-A simple <a href="http://expressjs.com/" title="Express" target="_blank">Express</a> app that responds to a request with the HTTP status code that was requested.
+A simple <a href="http://expressjs.com/" title="Express" target="_blank">Express</a> app that responds to an HTTP request with the HTTP status code that was requested. Licensed under the MIT License.
 
 ## Usage
 Install dependencies:
