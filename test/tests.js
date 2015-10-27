@@ -8,7 +8,7 @@ describe('Responder', function() {
     describe('Valid Request', function() {
         commonStatusCodes.forEach(function(statusCode) {
             it('should respond ' + statusCode + ' when requested', function (done) {
-                supertest(app).get('/' + statusCode)
+                supertest(app).get('/status/' + statusCode)
                     .expect(statusCode)
                     .end(function (err, res) {
                         console.log(res.statusCode + '\n');
@@ -20,7 +20,7 @@ describe('Responder', function() {
 
     describe('Invalid Request', function() {
         it('should respond 400 when an invalid request is made', function(done) {
-            supertest(app).get('/invalidRequest')
+            supertest(app).get('/status/invalidRequest')
                 .expect(400)
                 .end(function(err) {
                     done(err);

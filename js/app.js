@@ -3,6 +3,6 @@ var express = require('express'),
 
 var app = express();
 
-app.get('/:statusCode', respond);
+app.get('/status/:statusCode', respond);
 
 module.exports = app;
