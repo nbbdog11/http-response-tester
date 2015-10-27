@@ -1,0 +1,12 @@
+{
+  "name": "http-response-tester",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "~4.13.1"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "mocha": "*",
+    "supertest": "*"
+  }
+}
