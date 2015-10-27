@@ -4,10 +4,23 @@ A simple [Express](http://expressjs.com/ "Express") app that responds to a reque
 
 ## Usage
 Install dependencies:
-    npm install
+
+```bash
+$ npm install
+```
     
 Start application:
-    node js/http-response-tester.js
+
+```bash
+$ node js/http-response-tester.js
+```
     
 Send a request to the express server:
-    http://localhost:3000/status/{statusCode}
+
+```bash
+$ curl -I http://localhost:3000/status/{statusCode}
+```
+
+## Motivation
+I decided to develop this little utility because I needed a way to test how an HTTP client would behave with various 
+possible responses. This was a lot easier than trying to force the status codes using other means.
