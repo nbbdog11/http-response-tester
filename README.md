@@ -1,6 +1,6 @@
 # http-response-tester
 
-A simple <a href="http://expressjs.com/" title="Express" target="_blank">Express</a> app that responds to a request with the HTTP status code that was requested. It can also simulate a network delay, useful for testing latency or timeout scenarios.
+A simple <a href="http://expressjs.com/" title="Express" target="_blank">Express</a> app that responds to a request with the HTTP status code that was requested. It can also simulate a network delay, useful for testing latency or timeout scenarios. Licensed under the MIT License.
 
 ## Usage
 Install dependencies:
