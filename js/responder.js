@@ -6,6 +6,16 @@ var responder = {
         } else {
             res.sendStatus(parseInt(statusCode));
         }
+    },
+    delay: function(req, res) {
+        var delayInSeconds = req.params.delayInSeconds;
+        if (isNaN(delayInSeconds)) {
+            res.status(400).end('Please request a valid delay time.')
+        } else {
+            setTimeout(function() {
+                res.end();
+            }, delayInSeconds * 1000);
+        }
     }
 };
 

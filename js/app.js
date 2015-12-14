@@ -1,8 +1,9 @@
 var express = require('express'),
-    respond = require('./responder.js').respond;
+    responder = require('./responder.js');
 
 var app = express();
 
-app.get('/status/:statusCode', respond);
+app.get('/status/:statusCode', responder.respond);
+app.get('/delay/:delayInSeconds', responder.delay);
 
 module.exports = app;
