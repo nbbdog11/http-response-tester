@@ -11,8 +11,7 @@ describe('Responder', function() {
                 it('should respond ' + statusCode + ' when requested', function(done) {
                     supertest(app).get('/status/' + statusCode)
                         .expect(statusCode)
-                        .end(function (err, res) {
-                            console.log(res.statusCode + '\n');
+                        .end(function (err) {
                             done(err);
                         });
                 });
