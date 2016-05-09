@@ -1,3 +1,4 @@
+var config = {};
 var responder = {
     respond: function(req, res) {
         var statusCode = req.params.statusCode;
@@ -18,7 +19,21 @@ var responder = {
         }
     },
     responseBody: function(req, res) {
-        res.end(req.params.responseBody);
+        var configKey = req.params.configKey;
+        if (!config) {
+            res.status(400).end('Required config file for responses not supplied.');
+        }
+        else {
+            var configuredResponse = config[configKey];
+            if(!configuredResponse)
+            {
+                res.status(400).end('Key: ' + configKey + ' not found in supplied config.');
+            }
+            res.end(configuredResponse);
+        }
+    },
+    loadConfig: function(configObject) {
+        config = configObject;
     }
 };
 
