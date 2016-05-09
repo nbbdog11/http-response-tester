@@ -1,5 +1,4 @@
-var chai = require('chai'),
-    supertest = require('supertest'),
+var supertest = require('supertest'),
     app = require('../js/app.js');
 
 var commonStatusCodes = [200, 302, 400, 401, 404, 500, 502, 503];
@@ -65,11 +64,32 @@ describe('Responder', function() {
     });
 
     describe('Response Body', function() {
-        it('should respond with the string passed to it', function(done) {
-            var expectedBody = 'some-response';
-            supertest(app).get('/body/' + expectedBody)
-                .expect(200, expectedBody)
-                .end(function(err) {
+        describe('should 400', function() {
+            it('when config not supplied', function(done) {
+                app.loadConfig(null);
+                var someKey = 'some-key';
+                supertest(app).get('/body/' + someKey)
+                    .expect(400)
+                    .end(function (err) {
+                        done(err);
+                    });
+            });
+            it('when key does not exist in config', function(done) {
+                app.loadConfig({});
+                var keyNotInConfig = 'key-not-in-config';
+                supertest(app).get('/body/' + keyNotInConfig)
+                    .expect(400)
+                    .end(function (err) {
+                        done(err);
+                    });
+            });
+        });
+        it('should return response when it exists in config', function(done) {
+            var value = 'value';
+            app.loadConfig({ 'key': value });
+            supertest(app).get('/body/key')
+                .expect(200, value)
+                .end(function (err) {
                     done(err);
                 });
         });
@@ -77,6 +97,9 @@ describe('Responder', function() {
 });
 
 describe('Endpoint', function() {
+    beforeEach(function() {
+        app.loadConfig({});
+    });
     it('/status/ should exist', function(done) {
         supertest(app).get('/status/200')
             .expect(200)
@@ -92,7 +115,8 @@ describe('Endpoint', function() {
             });
     });
     it('/body/ should exist', function(done) {
-        supertest(app).get('/body/string')
+        app.loadConfig({'key': 'value'});
+        supertest(app).get('/body/key')
             .expect(200)
             .end(function(err){
                 done(err);
