@@ -1,9 +1,13 @@
 var supertest = require('supertest'),
-    app = require('../js/app.js');
+    AppSetup = require('../js/app.js'),
+    app = null;
 
 var commonStatusCodes = [200, 302, 400, 401, 404, 500, 502, 503];
 
 describe('Responder', function() {
+    beforeEach(function() {
+       app = new AppSetup({}).app;
+    });
     describe('Status Codes', function() {
         describe('Valid Request', function() {
             commonStatusCodes.forEach(function(statusCode) {
@@ -66,7 +70,7 @@ describe('Responder', function() {
     describe('Response Body', function() {
         describe('should 400', function() {
             it('when config not supplied', function(done) {
-                app.loadConfig(null);
+                app = new AppSetup(null).app;
                 var someKey = 'some-key';
                 supertest(app).get('/body/' + someKey)
                     .expect(400)
@@ -75,7 +79,6 @@ describe('Responder', function() {
                     });
             });
             it('when key does not exist in config', function(done) {
-                app.loadConfig({});
                 var keyNotInConfig = 'key-not-in-config';
                 supertest(app).get('/body/' + keyNotInConfig)
                     .expect(400)
@@ -86,7 +89,7 @@ describe('Responder', function() {
         });
         it('should return response when it exists in config', function(done) {
             var value = 'value';
-            app.loadConfig({ 'key': value });
+            app = new AppSetup({ 'key': value }).app;
             supertest(app).get('/body/key')
                 .expect(200, value)
                 .end(function (err) {
@@ -98,7 +101,7 @@ describe('Responder', function() {
 
 describe('Endpoint', function() {
     beforeEach(function() {
-        app.loadConfig({});
+        app = new AppSetup({}).app;
     });
     it('/status/ should exist', function(done) {
         supertest(app).get('/status/200')
@@ -115,7 +118,7 @@ describe('Endpoint', function() {
             });
     });
     it('/body/ should exist', function(done) {
-        app.loadConfig({'key': 'value'});
+        app = new AppSetup({'key': 'value'}).app;
         supertest(app).get('/body/key')
             .expect(200)
             .end(function(err){

@@ -1,22 +1,20 @@
 var express = require('express'),
     Responder = require('./responder.js'),
-    responder = new Responder(),
-    config = require('./config.js');
+    responder = new Responder();
 
-var app = express();
+function AppSetup(configObject) {
+    configObject = configObject || {};
+    this.app = express();
 
-app.get('/status/:statusCode', function(req, res) {
-    var response = responder.statusCode(req.params.statusCode);
-    res.status(response.statusCode).end(response.response);
-});
-app.get('/delay/:delayInSeconds', responder.delay);
-app.get('/body/:configKey', function(req, res) {
-    var response = responder.responseBody(app.configObject, req.params.configKey);
-    res.status(response.statusCode).end(response.response);
-});
+    this.app.get('/status/:statusCode', function(req, res) {
+        var response = responder.statusCode(req.params.statusCode);
+        res.status(response.statusCode).end(response.response);
+    });
+    this.app.get('/delay/:delayInSeconds', responder.delay);
+    this.app.get('/body/:configKey', function(req, res) {
+        var response = responder.responseBody(configObject, req.params.configKey);
+        res.status(response.statusCode).end(response.response);
+    });
+}
 
-app.loadConfig = function (configObject) {
-    app.configObject = configObject;
-};
-
-module.exports = app;
+module.exports = AppSetup;
