@@ -20,15 +20,11 @@ Responder.prototype.responseBody = function(config, key) {
     return new Response(200, configuredResponse);
 };
 
-Responder.prototype.delay = function(req, res) {
-    var delayInSeconds = req.params.delayInSeconds;
+Responder.prototype.delay = function (delayInSeconds, callback) {
     if (isNaN(delayInSeconds)) {
-        res.status(400).end('Please request a valid delay time.');
-    } else {
-        setTimeout(function() {
-            res.end();
-        }, delayInSeconds * 1000);
+        return new Response(400, 'Invalid value for delay: ' + delayInSeconds);
     }
+    setTimeout(callback, delayInSeconds * 1000);
 };
 
 module.exports = Responder;

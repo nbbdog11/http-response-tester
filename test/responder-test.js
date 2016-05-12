@@ -1,7 +1,8 @@
 var Responder = require('../js/responder.js'),
     chai = require('chai'),
     should = chai.should(),
-    expect = chai.expect;
+    expect = chai.expect,
+    sinon = require('sinon');
 
 describe('Responder', function() {
     var subject = new Responder();
@@ -15,6 +16,9 @@ describe('Responder', function() {
         });
         it('responseBody', function() {
             should.exist(subject.responseBody);
+        });
+        it('delay', function() {
+            should.exist(subject.delay);
         });
     });
 
@@ -114,6 +118,42 @@ describe('Responder', function() {
 
                 expect(result.statusCode).to.equal(400);
             });
+        });
+    });
+
+    describe('delay', function() {
+        describe('when request is valid', function() {
+            beforeEach(function () {
+                this.clock = sinon.useFakeTimers();
+            });
+            afterEach(function () {
+                this.clock.restore();
+            });
+
+            it('calls callback after timeout', function() {
+                var callback = sinon.spy();
+
+                subject.delay(1, callback);
+
+                this.clock.tick(999);
+                expect(callback.called).to.be.false;
+                this.clock.tick(1);
+                expect(callback.called).to.be.true;
+            })
+        });
+
+        describe('when parameter is not a number', function() {
+            it('returns 400', function() {
+                var result = subject.delay('not-a-number');
+
+                expect(result.statusCode).to.equal(400);
+            });
+
+            it('returns error message', function () {
+                var result = subject.delay('not-a-number');
+
+                expect(result.response).to.equal('Invalid value for delay: not-a-number');
+            })
         });
     });
 });
