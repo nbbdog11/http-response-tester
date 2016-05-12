@@ -1,4 +1,4 @@
-var Response = require('./response.js');
+var Response = require('./Response.js');
 
 function Responder () {}
 
