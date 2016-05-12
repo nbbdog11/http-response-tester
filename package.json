@@ -1,13 +1,31 @@
 {
   "name": "http-response-tester",
-  "version": "0.0.1",
-  "dependencies": {
-    "express": "~4.13.1"
+  "version": "0.9.0",
+  "description": "A simple Express app for specifying the response that you want from the server (status code, response delay, response body).",
+  "main": "js/http-response-tester.js",
+  "directories": {
+    "test": "test"
   },
+  "scripts": {
+    "test": "mocha -wC -R list"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nbbdog11/http-response-tester.git"
+  },
+  "author": "Scott Wagner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nbbdog11/http-response-tester/issues"
+  },
+  "homepage": "https://github.com/nbbdog11/http-response-tester#readme",
   "devDependencies": {
-    "chai": "*",
-    "mocha": "*",
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
     "sinon": "^1.17.4",
-    "supertest": "*"
+    "supertest": "^1.2.0"
+  },
+  "dependencies": {
+    "express": "^4.13.4"
   }
 }
