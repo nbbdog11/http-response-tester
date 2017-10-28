@@ -1,159 +1,160 @@
-var Responder = require('../js/responder.js'),
-    chai = require('chai'),
-    should = chai.should(),
-    expect = chai.expect,
-    sinon = require('sinon');
+/* eslint-disable no-unused-expressions */
+const {
+  statusCode,
+  responseBody,
+  delay,
+} = require('../js/responder.js');
+const chai = require('chai');
 
-describe('Responder', function() {
-    var subject = new Responder();
-    it('class exists', function() {
-        should.exist(Responder);
+const should = chai.should();
+const { expect } = chai;
+const sinon = require('sinon');
+
+describe('Responder', () => {
+  describe('function defined', () => {
+    it('statusCode', () => {
+      should.exist(statusCode);
     });
-    
-    describe('function defined', function() {
-        it('statusCode', function() {
-            should.exist(subject.statusCode);
-        });
-        it('responseBody', function() {
-            should.exist(subject.responseBody);
-        });
-        it('delay', function() {
-            should.exist(subject.delay);
-        });
+    it('responseBody', () => {
+      should.exist(responseBody);
     });
-
-    describe('statusCode', function() {
-        var errorMessage = 'Please request a valid status code.';
-        it('returns input status code', function() {
-            var expectedStatusCode = 200;
-
-            var result = subject.statusCode(expectedStatusCode);
-
-            expect(result.statusCode).to.equal(expectedStatusCode)
-        });
-        
-        it('handles input strings', function () {
-            var expectedStatusCode = "200";
-
-            var result = subject.statusCode(expectedStatusCode);
-
-            expect(result.statusCode).to.equal(200);
-        });
-        describe('when input is null', function() {
-            it('returns 400', function() {
-                var result = subject.statusCode(null);
-
-                expect(result.statusCode).to.equal(400);
-            });
-
-            it('sets proper error message', function() {
-                var result = subject.statusCode(null);
-
-
-                expect(result.response).to.equal(errorMessage);
-            });
-        });
-
-        describe('when input is not a number', function() {
-            it('returns 400', function() {
-                var result = subject.statusCode("not-a-number");
-
-                expect(result.statusCode).to.equal(400);
-            });
-
-            it('sets proper error message', function() {
-                var result = subject.statusCode("not-a-number");
-
-                expect(result.response).to.equal(errorMessage);
-            });
-        });
+    it('delay', () => {
+      should.exist(delay);
     });
-    
-    describe('responseBody', function() {
-        describe('when key exists in config', function() {
-            it('returns 200', function() {
-                var config = {'some-key': 'some-value'};
+  });
 
-                var result = subject.responseBody(config, 'some-key');
+  describe('statusCode', () => {
+    const errorMessage = 'Please request a valid status code.';
+    it('returns input status code', () => {
+      const expectedStatusCode = 200;
 
-                expect(result.statusCode).to.equal(200);
-            });
+      const result = statusCode(expectedStatusCode);
 
-            it('returns configured response', function () {
-                var config = {'some-key': 'some-value'};
-
-                var result = subject.responseBody(config, 'some-key');
-
-                expect(result.response).to.equal('some-value');
-            });
-        });
-
-        describe('when config is not supplied', function() {
-            it('returns error response', function() {
-                var result = subject.responseBody(null);
-
-                expect(result.response).to.equal('Required config file for responses not supplied.');
-            });
-
-            it('returns 400', function() {
-                var result = subject.responseBody(null);
-
-                expect(result.statusCode).to.equal(400);
-            });
-        });
-
-        describe('when key is not in config', function() {
-            it('returns error response', function() {
-                var config = {'some-key': 'some-value'};
-
-                var result = subject.responseBody(config, 'some-other-key');
-
-                expect(result.response).to.equal('Key: some-other-key not found in supplied config.');
-            });
-
-            it('returns 400', function() {
-                var config = {'some-key': 'some-value'};
-
-                var result = subject.responseBody(config, 'some-other-key');
-
-                expect(result.statusCode).to.equal(400);
-            });
-        });
+      expect(result.statusCode).to.equal(expectedStatusCode);
     });
 
-    describe('delay', function() {
-        describe('when request is valid', function() {
-            beforeEach(function () {
-                this.clock = sinon.useFakeTimers();
-            });
-            afterEach(function () {
-                this.clock.restore();
-            });
+    it('handles input strings', () => {
+      const expectedStatusCode = '200';
 
-            it('calls callback after timeout', function() {
-                var callback = sinon.spy();
+      const result = statusCode(expectedStatusCode);
 
-                subject.delay(1, callback);
-
-                this.clock.tick(999);
-                expect(callback.called).to.be.false;
-                this.clock.tick(1);
-                expect(callback.called).to.be.true;
-            })
-        });
-
-        describe('when parameter is not a number', function() {
-            it('returns 400', function() {
-                var result = subject.delay('not-a-number');
-
-                expect(result.statusCode).to.equal(400);
-            });
-
-            it('returns error message', function () {
-                var result = subject.delay('not-a-number');
-
-                expect(result.response).to.equal('Invalid value for delay: not-a-number');
-            })
-        });
+      expect(result.statusCode).to.equal(200);
     });
+    describe('when input is null', () => {
+      it('returns 400', () => {
+        const result = statusCode(null);
+
+        expect(result.statusCode).to.equal(400);
+      });
+
+      it('sets proper error message', () => {
+        const result = statusCode(null);
+
+
+        expect(result.response).to.equal(errorMessage);
+      });
+    });
+
+    describe('when input is not a number', () => {
+      it('returns 400', () => {
+        const result = statusCode('not-a-number');
+
+        expect(result.statusCode).to.equal(400);
+      });
+
+      it('sets proper error message', () => {
+        const result = statusCode('not-a-number');
+
+        expect(result.response).to.equal(errorMessage);
+      });
+    });
+  });
+
+  describe('responseBody', () => {
+    describe('when key exists in config', () => {
+      it('returns 200', () => {
+        const config = { 'some-key': 'some-value' };
+
+        const result = responseBody(config, 'some-key');
+
+        expect(result.statusCode).to.equal(200);
+      });
+
+      it('returns configured response', () => {
+        const config = { 'some-key': 'some-value' };
+
+        const result = responseBody(config, 'some-key');
+
+        expect(result.response).to.equal('some-value');
+      });
+    });
+
+    describe('when config is not supplied', () => {
+      it('returns error response', () => {
+        const result = responseBody(null);
+
+        expect(result.response).to.equal('Required config file for responses not supplied.');
+      });
+
+      it('returns 400', () => {
+        const result = responseBody(null);
+
+        expect(result.statusCode).to.equal(400);
+      });
+    });
+
+    describe('when key is not in config', () => {
+      it('returns error response', () => {
+        const config = { 'some-key': 'some-value' };
+
+        const result = responseBody(config, 'some-other-key');
+
+        expect(result.response).to.equal('Key: some-other-key not found in supplied config.');
+      });
+
+      it('returns 400', () => {
+        const config = { 'some-key': 'some-value' };
+
+        const result = responseBody(config, 'some-other-key');
+
+        expect(result.statusCode).to.equal(400);
+      });
+    });
+  });
+
+  describe('delay', () => {
+    describe('when request is valid', () => {
+      beforeEach(function beforeEach() {
+        this.clock = sinon.useFakeTimers();
+      });
+      afterEach(function afterEach() {
+        this.clock.restore();
+      });
+
+      it('calls callback after timeout', function test() {
+        const callback = sinon.spy();
+
+        delay(1, callback);
+
+        this.clock.tick(999);
+        expect(callback.called).to.be.false;
+        this.clock.tick(1);
+        expect(callback.called).to.be.true;
+      });
+    });
+
+    describe('when parameter is not a number', () => {
+      it('returns 400', () => {
+        const result = delay('not-a-number');
+
+        expect(result.statusCode).to.equal(400);
+      });
+
+      it('returns error message', () => {
+        const result = delay('not-a-number');
+
+        expect(result.response).to.equal('Invalid value for delay: not-a-number');
+      });
+    });
+  });
 });
