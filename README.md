@@ -11,10 +11,21 @@ Install dependencies:
 $ npm install
 ```
 
+or
+
+```bash
+$ yarn
+```
+
 Start application:
 
 ```bash
-$ node js/http-response-tester.js {config-file}
+$ npm start
+```
+If supplying a config file for pre-configured response values, use:
+
+```bash
+$ npm start -- {configFileLocation}
 ```
 
 Send a request to the express server:
