@@ -16,6 +16,7 @@
   },
   "scripts": {
     "precommit": "lint-staged",
+    "build": "yarn run lint && yarn run test",
     "lint": "eslint ./js/**/*.js ./test/**/*.js",
     "start": "node ./js/http-response-tester.js",
     "test": "mocha -R list"
