@@ -1,11 +1,11 @@
 const Response = require('./Response.js');
 
-const isValidNumber = (numberString) => {
+const isValidNumber = numberString => {
   const number = parseInt(numberString, 10);
   return !Number.isNaN(number);
 };
 
-const statusCode = (code) => {
+const statusCode = code => {
   const validRequest = code && isValidNumber(code);
   const statusCodeValue = validRequest ? parseInt(code, 10) : 400;
   const response = validRequest ? '' : 'Please request a valid status code.';
@@ -14,7 +14,10 @@ const statusCode = (code) => {
 
 const responseBody = (config, key) => {
   if (!config) {
-    return new Response(400, 'Required config file for responses not supplied.');
+    return new Response(
+      400,
+      'Required config file for responses not supplied.'
+    );
   }
   const configuredResponse = config[key];
   if (!configuredResponse) {
@@ -35,5 +38,5 @@ const delay = (delayInSeconds, callback) => {
 module.exports = {
   statusCode,
   responseBody,
-  delay,
+  delay
 };

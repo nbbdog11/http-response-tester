@@ -1,9 +1,5 @@
 /* eslint-disable no-unused-expressions */
-const {
-  statusCode,
-  responseBody,
-  delay,
-} = require('../js/responder.js');
+const { statusCode, responseBody, delay } = require('../js/responder.js');
 const chai = require('chai');
 
 const should = chai.should();
@@ -50,7 +46,6 @@ describe('Responder', () => {
       it('sets proper error message', () => {
         const result = statusCode(null);
 
-
         expect(result.response).to.equal(errorMessage);
       });
     });
@@ -93,7 +88,9 @@ describe('Responder', () => {
       it('returns error response', () => {
         const result = responseBody(null);
 
-        expect(result.response).to.equal('Required config file for responses not supplied.');
+        expect(result.response).to.equal(
+          'Required config file for responses not supplied.'
+        );
       });
 
       it('returns 400', () => {
@@ -109,7 +106,9 @@ describe('Responder', () => {
 
         const result = responseBody(config, 'some-other-key');
 
-        expect(result.response).to.equal('Key: some-other-key not found in supplied config.');
+        expect(result.response).to.equal(
+          'Key: some-other-key not found in supplied config.'
+        );
       });
 
       it('returns 400', () => {
@@ -153,7 +152,9 @@ describe('Responder', () => {
       it('returns error message', () => {
         const result = delay('not-a-number');
 
-        expect(result.response).to.equal('Invalid value for delay: not-a-number');
+        expect(result.response).to.equal(
+          'Invalid value for delay: not-a-number'
+        );
       });
     });
   });

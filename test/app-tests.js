@@ -7,15 +7,16 @@ const commonStatusCodes = [200, 302, 400, 401, 404, 500, 502, 503];
 
 describe('Responder', () => {
   beforeEach(() => {
-    (app = AppSetup());
+    app = AppSetup();
   });
   describe('Status Codes', () => {
     describe('Valid Request', () => {
-      commonStatusCodes.forEach((statusCode) => {
-        it(`should respond ${statusCode} when requested`, (done) => {
-          supertest(app).get(`/status/${statusCode}`)
+      commonStatusCodes.forEach(statusCode => {
+        it(`should respond ${statusCode} when requested`, done => {
+          supertest(app)
+            .get(`/status/${statusCode}`)
             .expect(statusCode)
-            .end((err) => {
+            .end(err => {
               done(err);
             });
         });
@@ -23,10 +24,11 @@ describe('Responder', () => {
     });
 
     describe('Invalid Request', () => {
-      it('should respond 400 when an invalid request is made', (done) => {
-        supertest(app).get('/status/invalidRequest')
+      it('should respond 400 when an invalid request is made', done => {
+        supertest(app)
+          .get('/status/invalidRequest')
           .expect(400)
-          .end((err) => {
+          .end(err => {
             done(err);
           });
       });
@@ -38,17 +40,22 @@ describe('Responder', () => {
         const timeDelayInSeconds = 1;
         this.timeout((timeDelayInSeconds + 1) * 1000);
         const start = new Date().getTime();
-        supertest(app).get(`/delay/${timeDelayInSeconds}`)
+        supertest(app)
+          .get(`/delay/${timeDelayInSeconds}`)
           .expect(200)
-          .end((err) => {
+          .end(err => {
             if (err) {
               done(err);
             }
             const end = new Date().getTime();
             const timeElapsed = end - start;
-            if (timeElapsed < (timeDelayInSeconds * 1000)) {
-              done(new Error(`Response was not delayed for full length. Expected Delay: ${
-                timeDelayInSeconds}, Actual Delay: ${timeElapsed / 1000}`));
+            if (timeElapsed < timeDelayInSeconds * 1000) {
+              done(
+                new Error(
+                  `Response was not delayed for full length. Expected Delay: ${timeDelayInSeconds}, Actual Delay: ${timeElapsed /
+                    1000}`
+                )
+              );
             } else {
               done();
             }
@@ -57,10 +64,11 @@ describe('Responder', () => {
     });
 
     describe('Invalid Request', () => {
-      it('should respond 400 when an invalid request is made', (done) => {
-        supertest(app).get('/delay/invalidRequest')
+      it('should respond 400 when an invalid request is made', done => {
+        supertest(app)
+          .get('/delay/invalidRequest')
           .expect(400)
-          .end((err) => {
+          .end(err => {
             done(err);
           });
       });
@@ -69,30 +77,33 @@ describe('Responder', () => {
 
   describe('Response Body', () => {
     describe('should 400', () => {
-      it('when config not supplied', (done) => {
+      it('when config not supplied', done => {
         app = AppSetup(null);
         const someKey = 'some-key';
-        supertest(app).get(`/body/${someKey}`)
+        supertest(app)
+          .get(`/body/${someKey}`)
           .expect(400)
-          .end((err) => {
+          .end(err => {
             done(err);
           });
       });
-      it('when key does not exist in config', (done) => {
+      it('when key does not exist in config', done => {
         const keyNotInConfig = 'key-not-in-config';
-        supertest(app).get(`/body/${keyNotInConfig}`)
+        supertest(app)
+          .get(`/body/${keyNotInConfig}`)
           .expect(400)
-          .end((err) => {
+          .end(err => {
             done(err);
           });
       });
     });
-    it('should return response when it exists in config', (done) => {
+    it('should return response when it exists in config', done => {
       const value = 'value';
-      (app = AppSetup({ key: value }));
-      supertest(app).get('/body/key')
+      app = AppSetup({ key: value });
+      supertest(app)
+        .get('/body/key')
         .expect(200, value)
-        .end((err) => {
+        .end(err => {
           done(err);
         });
     });
@@ -103,25 +114,28 @@ describe('Endpoint', () => {
   beforeEach(() => {
     app = AppSetup({});
   });
-  it('/status/ should exist', (done) => {
-    supertest(app).get('/status/200')
+  it('/status/ should exist', done => {
+    supertest(app)
+      .get('/status/200')
       .expect(200)
-      .end((err) => {
+      .end(err => {
         done(err);
       });
   });
-  it('/delay/ should exist', (done) => {
-    supertest(app).get('/delay/1')
+  it('/delay/ should exist', done => {
+    supertest(app)
+      .get('/delay/1')
       .expect(200)
-      .end((err) => {
+      .end(err => {
         done(err);
       });
   });
-  it('/body/ should exist', (done) => {
+  it('/body/ should exist', done => {
     app = AppSetup({ key: 'value' });
-    supertest(app).get('/body/key')
+    supertest(app)
+      .get('/body/key')
       .expect(200)
-      .end((err) => {
+      .end(err => {
         done(err);
       });
   });

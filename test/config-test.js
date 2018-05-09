@@ -14,7 +14,9 @@ describe('Config', () => {
   });
 
   it('load function reads from file', () => {
-    const configObject = config.loadFromFile(`${__dirname}/resources/test-config.json`);
+    const configObject = config.loadFromFile(
+      `${__dirname}/resources/test-config.json`
+    );
     expect(configObject.key).to.equal('value');
   });
 });

@@ -6,9 +6,20 @@
   "directories": {
     "test": "test"
   },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "yarn run lint",
+      "yarn run test",
+      "git add"
+    ]
+  },
   "scripts": {
+    "precommit": "lint-staged",
+    "build": "yarn run lint && yarn run test",
+    "lint": "eslint ./js/**/*.js ./test/**/*.js",
     "start": "node ./js/http-response-tester.js",
-    "test": "./node_modules/mocha/bin/mocha -R list"
+    "test": "mocha -R list"
   },
   "repository": {
     "type": "git",
@@ -24,8 +35,12 @@
     "chai": "^3.5.0",
     "eslint": "^4.10.0",
     "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.8.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.1.0",
     "mocha": "^2.4.5",
+    "prettier": "^1.12.1",
     "sinon": "^1.17.4",
     "supertest": "^1.2.0"
   },
