@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-const { statusCode, responseBody, delay } = require('../js/responder.js').default;
+const { statusCode, responseBody, delay } = require('../js/responder.js');
 const chai = require('chai');
 
 const should = chai.should();
