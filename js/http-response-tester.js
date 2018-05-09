@@ -13,7 +13,7 @@ const app = AppSetup(buildConfigObject());
 
 const port = process.env.PORT || 3000;
 
-http.createServer(app).listen(port, (err) => {
+http.createServer(app).listen(port, err => {
   if (err) {
     console.error(err);
     return;

@@ -1,7 +1,8 @@
 {
   "name": "http-response-tester",
   "version": "0.9.0",
-  "description": "A simple Express app for specifying the response that you want from the server (status code, response delay, response body).",
+  "description":
+    "A simple Express app for specifying the response that you want from the server (status code, response delay, response body).",
   "main": "js/http-response-tester.js",
   "directories": {
     "test": "test"
@@ -24,8 +25,10 @@
     "chai": "^3.5.0",
     "eslint": "^4.10.0",
     "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.8.0",
     "mocha": "^2.4.5",
+    "prettier": "^1.12.1",
     "sinon": "^1.17.4",
     "supertest": "^1.2.0"
   },

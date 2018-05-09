@@ -1,11 +1,8 @@
 const express = require('express');
-const {
-  statusCode,
-  delay,
-  responseBody,
-} = require('./responder.js');
+const { statusCode, delay, responseBody } = require('./responder.js');
 
-const sendResponse = (res, response) => res.status(response.statusCode).end(response.response);
+const sendResponse = (res, response) =>
+  res.status(response.statusCode).end(response.response);
 
 const AppSetup = (configObject = {}) => {
   const app = express();
