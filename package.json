@@ -10,12 +10,11 @@
     "*.js": [
       "prettier --write",
       "yarn run lint",
-      "yarn run test",
       "git add"
     ]
   },
   "scripts": {
-    "precommit": "lint-staged",
+    "precommit": "lint-staged && yarn run test",
     "build": "yarn run lint && yarn run test",
     "lint": "eslint ./js/**/*.js ./__tests__/**/*.js",
     "start": "node ./js/http-response-tester.js",
