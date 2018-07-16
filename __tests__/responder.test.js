@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
 const { statusCode, responseBody, delay } = require('../js/responder.js');
-const sinon = require('sinon');
 
 describe('Responder', () => {
   describe('function defined', () => {
@@ -130,14 +129,14 @@ describe('Responder', () => {
       });
 
       it('calls callback after timeout', () => {
-        const callback = sinon.spy();
+        const callback = jest.fn();
 
         delay(1, callback);
 
         jest.advanceTimersByTime(999);
-        expect(callback.called).toEqual(false);
+        expect(callback).not.toHaveBeenCalled();
         jest.advanceTimersByTime(1);
-        expect(callback.called).toEqual(true);
+        expect(callback).toHaveBeenCalled();
       });
     });
 

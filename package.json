@@ -41,7 +41,6 @@
     "jest": "^23.4.1",
     "lint-staged": "^7.1.0",
     "prettier": "^1.12.1",
-    "sinon": "^1.17.4",
     "supertest": "^1.2.0"
   },
   "dependencies": {
