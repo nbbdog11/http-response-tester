@@ -32,7 +32,6 @@
   },
   "homepage": "https://github.com/nbbdog11/http-response-tester#readme",
   "devDependencies": {
-    "chai": "^3.5.0",
     "eslint": "^4.10.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",

@@ -1,22 +1,20 @@
-const chai = require('chai');
-
-const should = chai.should();
-const { expect } = chai;
 const config = require('../js/config.js');
 
 describe('Config', () => {
   it('class exists', () => {
-    should.exist(config);
+    expect(config).toBeDefined();
+    expect(config).not.toBeNull();
   });
 
   it('load function exists', () => {
-    should.exist(config.loadFromFile);
+    expect(config.loadFromFile).toBeDefined();
+    expect(config.loadFromFile).not.toBeNull();
   });
 
   it('load function reads from file', () => {
     const configObject = config.loadFromFile(
       `${__dirname}/resources/test-config.json`
     );
-    expect(configObject.key).to.equal('value');
+    expect(configObject.key).toEqual('value');
   });
 });

@@ -1,21 +1,20 @@
 /* eslint-disable no-unused-expressions */
 const { statusCode, responseBody, delay } = require('../js/responder.js');
-const chai = require('chai');
-
-const should = chai.should();
-const { expect } = chai;
 const sinon = require('sinon');
 
 describe('Responder', () => {
   describe('function defined', () => {
     it('statusCode', () => {
-      should.exist(statusCode);
+      expect(statusCode).toBeDefined();
+      expect(statusCode).not.toBeNull();
     });
     it('responseBody', () => {
-      should.exist(responseBody);
+      expect(responseBody).toBeDefined();
+      expect(responseBody).not.toBeNull();
     });
     it('delay', () => {
-      should.exist(delay);
+      expect(delay).toBeDefined();
+      expect(delay).not.toBeNull();
     });
   });
 
@@ -26,7 +25,7 @@ describe('Responder', () => {
 
       const result = statusCode(expectedStatusCode);
 
-      expect(result.statusCode).to.equal(expectedStatusCode);
+      expect(result.statusCode).toEqual(expectedStatusCode);
     });
 
     it('handles input strings', () => {
@@ -34,19 +33,19 @@ describe('Responder', () => {
 
       const result = statusCode(expectedStatusCode);
 
-      expect(result.statusCode).to.equal(200);
+      expect(result.statusCode).toEqual(200);
     });
     describe('when input is null', () => {
       it('returns 400', () => {
         const result = statusCode(null);
 
-        expect(result.statusCode).to.equal(400);
+        expect(result.statusCode).toEqual(400);
       });
 
       it('sets proper error message', () => {
         const result = statusCode(null);
 
-        expect(result.response).to.equal(errorMessage);
+        expect(result.response).toEqual(errorMessage);
       });
     });
 
@@ -54,13 +53,13 @@ describe('Responder', () => {
       it('returns 400', () => {
         const result = statusCode('not-a-number');
 
-        expect(result.statusCode).to.equal(400);
+        expect(result.statusCode).toEqual(400);
       });
 
       it('sets proper error message', () => {
         const result = statusCode('not-a-number');
 
-        expect(result.response).to.equal(errorMessage);
+        expect(result.response).toEqual(errorMessage);
       });
     });
   });
@@ -72,7 +71,7 @@ describe('Responder', () => {
 
         const result = responseBody(config, 'some-key');
 
-        expect(result.statusCode).to.equal(200);
+        expect(result.statusCode).toEqual(200);
       });
 
       it('returns configured response', () => {
@@ -80,7 +79,7 @@ describe('Responder', () => {
 
         const result = responseBody(config, 'some-key');
 
-        expect(result.response).to.equal('some-value');
+        expect(result.response).toEqual('some-value');
       });
     });
 
@@ -88,7 +87,7 @@ describe('Responder', () => {
       it('returns error response', () => {
         const result = responseBody(null);
 
-        expect(result.response).to.equal(
+        expect(result.response).toEqual(
           'Required config file for responses not supplied.'
         );
       });
@@ -96,7 +95,7 @@ describe('Responder', () => {
       it('returns 400', () => {
         const result = responseBody(null);
 
-        expect(result.statusCode).to.equal(400);
+        expect(result.statusCode).toEqual(400);
       });
     });
 
@@ -106,7 +105,7 @@ describe('Responder', () => {
 
         const result = responseBody(config, 'some-other-key');
 
-        expect(result.response).to.equal(
+        expect(result.response).toEqual(
           'Key: some-other-key not found in supplied config.'
         );
       });
@@ -116,7 +115,7 @@ describe('Responder', () => {
 
         const result = responseBody(config, 'some-other-key');
 
-        expect(result.statusCode).to.equal(400);
+        expect(result.statusCode).toEqual(400);
       });
     });
   });
@@ -136,9 +135,9 @@ describe('Responder', () => {
         delay(1, callback);
 
         jest.advanceTimersByTime(999);
-        expect(callback.called).to.be.false;
+        expect(callback.called).toEqual(false);
         jest.advanceTimersByTime(1);
-        expect(callback.called).to.be.true;
+        expect(callback.called).toEqual(true);
       });
     });
 
@@ -146,13 +145,13 @@ describe('Responder', () => {
       it('returns 400', () => {
         const result = delay('not-a-number');
 
-        expect(result.statusCode).to.equal(400);
+        expect(result.statusCode).toEqual(400);
       });
 
       it('returns error message', () => {
         const result = delay('not-a-number');
 
-        expect(result.response).to.equal(
+        expect(result.response).toEqual(
           'Invalid value for delay: not-a-number'
         );
       });
