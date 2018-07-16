@@ -123,21 +123,21 @@ describe('Responder', () => {
 
   describe('delay', () => {
     describe('when request is valid', () => {
-      beforeEach(function beforeEach() {
-        this.clock = sinon.useFakeTimers();
+      beforeAll(() => {
+        jest.useFakeTimers();
       });
-      afterEach(function afterEach() {
-        this.clock.restore();
+      beforeEach(() => {
+        jest.clearAllTimers();
       });
 
-      it('calls callback after timeout', function test() {
+      it('calls callback after timeout', () => {
         const callback = sinon.spy();
 
         delay(1, callback);
 
-        this.clock.tick(999);
+        jest.advanceTimersByTime(999);
         expect(callback.called).to.be.false;
-        this.clock.tick(1);
+        jest.advanceTimersByTime(1);
         expect(callback.called).to.be.true;
       });
     });

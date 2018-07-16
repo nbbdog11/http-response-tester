@@ -19,7 +19,7 @@
     "build": "yarn run lint && yarn run test",
     "lint": "eslint ./js/**/*.js ./test/**/*.js",
     "start": "node ./js/http-response-tester.js",
-    "test": "mocha -R list"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -37,9 +37,10 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jest": "^21.17.0",
     "husky": "^0.14.3",
+    "jest": "^23.4.1",
     "lint-staged": "^7.1.0",
-    "mocha": "^2.4.5",
     "prettier": "^1.12.1",
     "sinon": "^1.17.4",
     "supertest": "^1.2.0"

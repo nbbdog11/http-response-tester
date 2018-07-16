@@ -36,9 +36,8 @@ describe('Responder', () => {
   });
   describe('Response Delay', () => {
     describe('Valid Request', () => {
-      it('should respond in the amount of time requested', function test(done) {
+      it('should respond in the amount of time requested', done => {
         const timeDelayInSeconds = 1;
-        this.timeout((timeDelayInSeconds + 1) * 1000);
         const start = new Date().getTime();
         supertest(app)
           .get(`/delay/${timeDelayInSeconds}`)

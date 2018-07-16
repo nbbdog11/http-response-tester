@@ -1,7 +1,10 @@
 {
   "extends": ["airbnb-base", "prettier"],
+  "plugins": [
+    "jest"
+  ],
   "env": {
     "node": true,
-    "mocha": true
+    "jest/globals": true
   }
 }
