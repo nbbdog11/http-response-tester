@@ -1,12 +1,30 @@
 /* eslint-disable no-console */
 const AppSetup = require('./app.js');
-const config = require('./config.js');
 const http = require('http');
 
+const tryParseConfiguredResponse = configuredResponseString => {
+  try {
+    return JSON.parse(configuredResponseString);
+  } catch (e) {
+    console.error(
+      'Error parsing responses configuration from environment variable.'
+    );
+    console.error(`Received ${configuredResponseString}`);
+    console.error('App will start without configured responses.');
+    console.error(e);
+    return {};
+  }
+};
+
 const buildConfigObject = () => {
-  const configPath = process.argv.slice(2)[0];
-  const configSpecified = configPath && configPath.length > 0;
-  return configSpecified ? config.loadFromFile(configPath) : {};
+  const configuredResponseString = process.env.HTTP_RESPONSE_TESTER_RESPONSES;
+  const configSpecified =
+    configuredResponseString && configuredResponseString.length > 0;
+  if (configSpecified) {
+    return tryParseConfiguredResponse(configuredResponseString);
+  }
+
+  return {};
 };
 
 const app = AppSetup(buildConfigObject());
