@@ -48,6 +48,8 @@ jobs:
     working_directory: ~/repo
 
     steps:
+      - setup_remote_docker
+
       - run:
           name: Publish to Docker Hub
           command: |
