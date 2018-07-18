@@ -49,6 +49,10 @@ jobs:
       - setup_remote_docker
 
       - run:
+          name: Check VERSION variable
+          command: echo $VERSION
+
+      - run:
           name: Publish to Docker Hub
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
