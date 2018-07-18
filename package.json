@@ -18,7 +18,8 @@
     "build": "yarn run lint && yarn run test",
     "lint": "eslint ./js/**/*.js ./__tests__/**/*.js",
     "start": "node ./js/http-response-tester.js",
-    "test": "jest"
+    "test": "jest",
+    "get-version": "echo $npm_package_version"
   },
   "repository": {
     "type": "git",
