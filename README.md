@@ -1,7 +1,5 @@
 # http-response-tester
 
-[![Build Status](https://travis-ci.org/nbbdog11/http-response-tester.svg?branch=master)](https://travis-ci.org/nbbdog11/http-response-tester)
-
 A simple <a href="http://expressjs.com/" title="Express" target="_blank">Express</a> app that can respond in various ways useful for testing. It can return a particular status code, it can simulate a network delay (useful for testing latency or timeout scenarios), and it can respond with a pre-configured response body. Licensed under the MIT License.
 
 ## Usage
