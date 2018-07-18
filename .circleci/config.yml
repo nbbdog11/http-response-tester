@@ -6,7 +6,6 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: circleci/node:9
 
     working_directory: ~/repo
@@ -38,4 +37,31 @@ jobs:
 
       - setup_remote_docker
 
-      - run: docker build -t nbbdog11/http-response-tester:$VERSION .
+      - run:
+          name: Build Docker image
+          command: docker build -t nbbdog11/http-response-tester:$VERSION .
+
+  publish_image:
+    docker:
+      - image: circleci/node:9
+
+    working_directory: ~/repo
+
+    steps:
+      - run:
+          name: Publish to Docker Hub
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push nbbdog11/http-response-tester:$VERSION
+
+workflows:
+  version: 2
+  build_and_publish:
+    jobs:
+      - build
+      - publish_image:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
