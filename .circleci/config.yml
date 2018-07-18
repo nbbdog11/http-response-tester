@@ -30,4 +30,4 @@ jobs:
 
       - run: yarn run build
 
-      - run: docker build -t nbbdog11/http-response-tester:0.9.0
+      - run: docker build -t nbbdog11/http-response-tester:0.9.0 .
