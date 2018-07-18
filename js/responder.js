@@ -14,14 +14,11 @@ const statusCode = code => {
 
 const responseBody = (config, key) => {
   if (!config) {
-    return new Response(
-      400,
-      'Required config file for responses not supplied.'
-    );
+    return new Response(400, 'Required config for responses not supplied.');
   }
   const configuredResponse = config[key];
   if (!configuredResponse) {
-    return new Response(400, `Key: ${key} not found in supplied config.`);
+    return new Response(400, `Key: '${key}' not found in supplied config.`);
   }
   return new Response(200, configuredResponse);
 };

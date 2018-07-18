@@ -87,7 +87,7 @@ describe('Responder', () => {
         const result = responseBody(null);
 
         expect(result.response).toEqual(
-          'Required config file for responses not supplied.'
+          'Required config for responses not supplied.'
         );
       });
 
@@ -105,7 +105,7 @@ describe('Responder', () => {
         const result = responseBody(config, 'some-other-key');
 
         expect(result.response).toEqual(
-          'Key: some-other-key not found in supplied config.'
+          "Key: 'some-other-key' not found in supplied config."
         );
       });
 
