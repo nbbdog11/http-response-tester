@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
 const respond = require('../js/responder');
-const Response = require('../js/Response');
 
 describe('respond', () => {
   const responseCallback = jest.fn();
@@ -12,7 +11,10 @@ describe('respond', () => {
     const errorMessage = 'Please request a valid status code.';
     it('returns input status code', () => {
       const statusCode = 200;
-      const expectedResponse = new Response(statusCode, '');
+      const expectedResponse = {
+        status: statusCode,
+        response: ''
+      };
 
       respond({ status: statusCode }, {}, responseCallback);
 
@@ -21,7 +23,10 @@ describe('respond', () => {
 
     it('handles input strings', () => {
       const statusCode = '200';
-      const expectedResponse = new Response(200, '');
+      const expectedResponse = {
+        status: 200,
+        response: ''
+      };
 
       respond({ status: statusCode }, {}, responseCallback);
 
@@ -31,7 +36,10 @@ describe('respond', () => {
     describe('when input is null', () => {
       it('returns 400 with proper error message', () => {
         const statusCode = null;
-        const expectedResponse = new Response(400, errorMessage);
+        const expectedResponse = {
+          status: 400,
+          response: errorMessage
+        };
 
         respond({ status: statusCode }, {}, responseCallback);
 
@@ -42,7 +50,10 @@ describe('respond', () => {
     describe('when input is not a number', () => {
       it('returns 400 with proper error message', () => {
         const statusCode = 'not-a-number';
-        const expectedResponse = new Response(400, errorMessage);
+        const expectedResponse = {
+          status: 400,
+          response: errorMessage
+        };
 
         respond({ status: statusCode }, {}, responseCallback);
 
@@ -56,7 +67,10 @@ describe('respond', () => {
       it('returns 200 with configured response', () => {
         const responseOptions = { responseKey: 'some-key' };
         const appConfig = { 'some-key': 'some-value' };
-        const expectedResponse = new Response(200, 'some-value');
+        const expectedResponse = {
+          status: 200,
+          response: 'some-value'
+        };
 
         respond(responseOptions, appConfig, responseCallback);
 
@@ -67,10 +81,10 @@ describe('respond', () => {
     describe('when config is not supplied', () => {
       it('returns 400 with proper error message', () => {
         const responseOptions = { responseKey: 'some-key' };
-        const expectedResponse = new Response(
-          400,
-          'Required config for responses not supplied.'
-        );
+        const expectedResponse = {
+          status: 400,
+          response: 'Required config for responses not supplied.'
+        };
 
         respond(responseOptions, null, responseCallback);
 
@@ -82,10 +96,10 @@ describe('respond', () => {
       it('returns 400 with proper error message', () => {
         const responseOptions = { responseKey: 'some-other-key' };
         const appConfig = { 'some-key': 'some-value' };
-        const expectedResponse = new Response(
-          400,
-          "Key: 'some-other-key' not found in supplied config."
-        );
+        const expectedResponse = {
+          status: 400,
+          response: "Key: 'some-other-key' not found in supplied config."
+        };
 
         respond(responseOptions, appConfig, responseCallback);
 
@@ -104,7 +118,10 @@ describe('respond', () => {
       });
 
       it('calls callback after timeout', () => {
-        const expectedResponse = new Response(200, '');
+        const expectedResponse = {
+          status: 200,
+          response: ''
+        };
 
         respond({ delay: 1 }, {}, responseCallback);
 
@@ -117,10 +134,10 @@ describe('respond', () => {
 
     describe('when parameter is not a number', () => {
       it('returns 400 with proper error message', () => {
-        const expectedResponse = new Response(
-          400,
-          'Invalid value for delay: not-a-number'
-        );
+        const expectedResponse = {
+          status: 400,
+          response: 'Invalid value for delay: not-a-number'
+        };
 
         respond({ delay: 'not-a-number' }, {}, responseCallback);
 
@@ -145,7 +162,10 @@ describe('respond', () => {
         status: 204,
         responseKey: 'some-key'
       };
-      const expectedResponse = new Response(204, 'some-value');
+      const expectedResponse = {
+        status: 204,
+        response: 'some-value'
+      };
 
       respond(responseOptions, appConfig, responseCallback);
 
@@ -157,7 +177,10 @@ describe('respond', () => {
         status: 204,
         delay: 1
       };
-      const expectedResponse = new Response(204, '');
+      const expectedResponse = {
+        status: 204,
+        response: ''
+      };
 
       const callback = jest.fn();
 
@@ -178,16 +201,17 @@ describe('respond', () => {
       const appConfig = {
         'some-key': 'some-value'
       };
-      const expectedResponse = new Response(204, 'some-value');
+      const expectedResponse = {
+        status: 204,
+        response: 'some-value'
+      };
 
-      const callback = jest.fn();
-
-      respond(responseOptions, appConfig, callback);
+      respond(responseOptions, appConfig, responseCallback);
 
       jest.advanceTimersByTime(999);
-      expect(callback).not.toHaveBeenCalled();
+      expect(responseCallback).not.toHaveBeenCalled();
       jest.advanceTimersByTime(1);
-      expect(callback).toHaveBeenCalledWith(expectedResponse);
+      expect(responseCallback).toHaveBeenCalledWith(expectedResponse);
     });
 
     it('aggregates multiple errors', () => {
@@ -203,7 +227,10 @@ describe('respond', () => {
         "Key: 'some-other-key' not found in supplied config."
       ];
       const expectedErrorString = expectedErrors.join('\n');
-      const expectedResponse = new Response(400, expectedErrorString);
+      const expectedResponse = {
+        status: 400,
+        response: expectedErrorString
+      };
 
       respond(responseOptions, appConfig, responseCallback);
 

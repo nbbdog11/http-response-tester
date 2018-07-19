@@ -1,5 +1,3 @@
-const Response = require('./Response');
-
 const isValidNumber = numberString => {
   if (numberString === null) {
     return false;
@@ -63,13 +61,19 @@ const validateRequest = (responseOptions, appConfig) => [
 const respond = (responseOptions, appConfig, callback) => {
   const validationErrors = validateRequest(responseOptions, appConfig);
   if (validationErrors && validationErrors.length > 0) {
-    const errorResponse = new Response(400, validationErrors.join('\n'));
+    const errorResponse = {
+      status: 400,
+      response: validationErrors.join('\n')
+    };
     callback(errorResponse);
   }
 
   const responseBody = getResponseBody(responseOptions.responseKey, appConfig);
   const statusCode = getStatusCode(responseOptions.status);
-  const response = new Response(statusCode, responseBody);
+  const response = {
+    status: statusCode,
+    response: responseBody
+  };
   delay(responseOptions.delay, () => callback(response));
 };
 
