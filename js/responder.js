@@ -1,7 +1,6 @@
 const validateRequest = require('./requestValidator');
 
 const getStatusCode = (code = 200) => parseInt(code, 10);
-
 const getResponseBody = (key, config) => (key && config ? config[key] : '');
 
 /* eslint-disable consistent-return */
@@ -22,15 +21,13 @@ const respond = (responseOptions, appConfig, callback) => {
       response: validationErrors.join('\n')
     };
     callback(errorResponse);
+  } else {
+    const response = {
+      status: getStatusCode(responseOptions.status),
+      response: getResponseBody(responseOptions.responseKey, appConfig)
+    };
+    delay(responseOptions.delay, () => callback(response));
   }
-
-  const responseBody = getResponseBody(responseOptions.responseKey, appConfig);
-  const statusCode = getStatusCode(responseOptions.status);
-  const response = {
-    status: statusCode,
-    response: responseBody
-  };
-  delay(responseOptions.delay, () => callback(response));
 };
 
 module.exports = respond;
