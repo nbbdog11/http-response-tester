@@ -14,7 +14,7 @@ describe('Responder', () => {
       commonStatusCodes.forEach(statusCode => {
         it(`should respond ${statusCode} when requested`, done => {
           supertest(app)
-            .get(`/status/${statusCode}`)
+            .get(`?statusCode=${statusCode}`)
             .expect(statusCode)
             .end(err => {
               done(err);
@@ -26,7 +26,7 @@ describe('Responder', () => {
     describe('Invalid Request', () => {
       it('should respond 400 when an invalid request is made', done => {
         supertest(app)
-          .get('/status/invalidRequest')
+          .get('?statusCode=invalidRequest')
           .expect(400)
           .end(err => {
             done(err);
@@ -112,14 +112,6 @@ describe('Responder', () => {
 describe('Endpoint', () => {
   beforeEach(() => {
     app = AppSetup({});
-  });
-  it('/status/ should exist', done => {
-    supertest(app)
-      .get('/status/200')
-      .expect(200)
-      .end(err => {
-        done(err);
-      });
   });
   it('/delay/ should exist', done => {
     supertest(app)

@@ -24,7 +24,7 @@ $ npm start
 Send a request to the express server:
 
 ```bash
-$ curl -I http://localhost:3000/status/{statusCode}
+$ curl -I http://localhost:3000?statusCode={statusCode}
 ```
 
 or

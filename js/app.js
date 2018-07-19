@@ -7,8 +7,8 @@ const sendResponse = (res, response) =>
 const AppSetup = (configObject = {}) => {
   const app = express();
 
-  app.get('/status/:statusCode', (req, res) => {
-    const response = statusCode(req.params.statusCode);
+  app.get('/', (req, res) => {
+    const response = statusCode(req.query.statusCode);
     sendResponse(res, response);
   });
 
