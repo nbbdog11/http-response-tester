@@ -8,17 +8,17 @@ const AppSetup = (configObject = {}) => {
   const app = express();
 
   app.get('/', (req, res) => {
-    const response = statusCode(req.query.statusCode);
-    sendResponse(res, response);
-  });
-
-  app.get('/delay/:delayInSeconds', (req, res) => {
-    const { delayInSeconds } = req.params;
-    const response = delay(delayInSeconds, res.end.bind(res));
-    if (response) {
+    if (req.query.statusCode) {
+      const response = statusCode(req.query.statusCode);
       sendResponse(res, response);
+    } else if (req.query.delay) {
+      const response = delay(req.query.delay, res.end.bind(res));
+      if (response) {
+        sendResponse(res, response);
+      }
     }
   });
+
   app.get('/body/:configKey', (req, res) => {
     const response = responseBody(configObject, req.params.configKey);
     sendResponse(res, response);

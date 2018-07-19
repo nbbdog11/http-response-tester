@@ -40,7 +40,7 @@ describe('Responder', () => {
         const timeDelayInSeconds = 1;
         const start = new Date().getTime();
         supertest(app)
-          .get(`/delay/${timeDelayInSeconds}`)
+          .get(`?delay=${timeDelayInSeconds}`)
           .expect(200)
           .end(err => {
             if (err) {
@@ -65,7 +65,7 @@ describe('Responder', () => {
     describe('Invalid Request', () => {
       it('should respond 400 when an invalid request is made', done => {
         supertest(app)
-          .get('/delay/invalidRequest')
+          .get('?delay=invalidRequest')
           .expect(400)
           .end(err => {
             done(err);
@@ -112,14 +112,6 @@ describe('Responder', () => {
 describe('Endpoint', () => {
   beforeEach(() => {
     app = AppSetup({});
-  });
-  it('/delay/ should exist', done => {
-    supertest(app)
-      .get('/delay/1')
-      .expect(200)
-      .end(err => {
-        done(err);
-      });
   });
   it('/body/ should exist', done => {
     app = AppSetup({ key: 'value' });

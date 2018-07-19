@@ -30,7 +30,7 @@ $ curl -I http://localhost:3000?statusCode={statusCode}
 or
 
 ```bash
-$ curl -I http://localhost:3000/delay/{delayInSeconds}
+$ curl -I http://localhost:3000?delay={delayInSeconds}
 ```
 
 You can now supply configured responses for a given key. The configured responses will be read from an environment variable called `HTTP_RESPONSE_TESTER_RESPONSES`. They should be formatted standard JSON.
