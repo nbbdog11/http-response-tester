@@ -16,12 +16,10 @@ const AppSetup = (configObject = {}) => {
       if (response) {
         sendResponse(res, response);
       }
+    } else if (req.query.body) {
+      const response = responseBody(configObject, req.query.body);
+      sendResponse(res, response);
     }
-  });
-
-  app.get('/body/:configKey', (req, res) => {
-    const response = responseBody(configObject, req.params.configKey);
-    sendResponse(res, response);
   });
 
   return app;

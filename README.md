@@ -36,7 +36,7 @@ $ curl -I http://localhost:3000?delay={delayInSeconds}
 You can now supply configured responses for a given key. The configured responses will be read from an environment variable called `HTTP_RESPONSE_TESTER_RESPONSES`. They should be formatted standard JSON.
 To use this feature, send a request like the one below:
 ```bash
-$ curl -I http://localhost:3000/body/{key}
+$ curl -I http://localhost:3000?body={key}
 ```
 When 'key' is a key defined in the JSON environment variable, the response will be the value defined in the config for the given key.
 ## Motivation

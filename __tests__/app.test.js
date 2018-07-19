@@ -5,7 +5,7 @@ let app = null;
 
 const commonStatusCodes = [200, 302, 400, 401, 404, 500, 502, 503];
 
-describe('Responder', () => {
+describe('http-response-tester', () => {
   beforeEach(() => {
     app = AppSetup();
   });
@@ -80,7 +80,7 @@ describe('Responder', () => {
         app = AppSetup(null);
         const someKey = 'some-key';
         supertest(app)
-          .get(`/body/${someKey}`)
+          .get(`?body=${someKey}`)
           .expect(400)
           .end(err => {
             done(err);
@@ -89,7 +89,7 @@ describe('Responder', () => {
       it('when key does not exist in config', done => {
         const keyNotInConfig = 'key-not-in-config';
         supertest(app)
-          .get(`/body/${keyNotInConfig}`)
+          .get(`?body=${keyNotInConfig}`)
           .expect(400)
           .end(err => {
             done(err);
@@ -100,26 +100,11 @@ describe('Responder', () => {
       const value = 'value';
       app = AppSetup({ key: value });
       supertest(app)
-        .get('/body/key')
+        .get('?body=key')
         .expect(200, value)
         .end(err => {
           done(err);
         });
     });
-  });
-});
-
-describe('Endpoint', () => {
-  beforeEach(() => {
-    app = AppSetup({});
-  });
-  it('/body/ should exist', done => {
-    app = AppSetup({ key: 'value' });
-    supertest(app)
-      .get('/body/key')
-      .expect(200)
-      .end(err => {
-        done(err);
-      });
   });
 });
