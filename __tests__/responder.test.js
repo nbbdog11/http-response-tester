@@ -1,28 +1,13 @@
 /* eslint-disable no-unused-expressions */
-const { statusCode, responseBody, delay } = require('../js/responder.js');
+const respond = require('../js/responder.js');
 
 describe('Responder', () => {
-  describe('function defined', () => {
-    it('statusCode', () => {
-      expect(statusCode).toBeDefined();
-      expect(statusCode).not.toBeNull();
-    });
-    it('responseBody', () => {
-      expect(responseBody).toBeDefined();
-      expect(responseBody).not.toBeNull();
-    });
-    it('delay', () => {
-      expect(delay).toBeDefined();
-      expect(delay).not.toBeNull();
-    });
-  });
-
-  describe('statusCode', () => {
+  describe('respond', () => {
     const errorMessage = 'Please request a valid status code.';
     it('returns input status code', () => {
       const expectedStatusCode = 200;
 
-      const result = statusCode(expectedStatusCode);
+      const result = respond({ status: expectedStatusCode });
 
       expect(result.statusCode).toEqual(expectedStatusCode);
     });
@@ -30,19 +15,20 @@ describe('Responder', () => {
     it('handles input strings', () => {
       const expectedStatusCode = '200';
 
-      const result = statusCode(expectedStatusCode);
+      const result = respond({ status: expectedStatusCode });
 
       expect(result.statusCode).toEqual(200);
     });
+
     describe('when input is null', () => {
       it('returns 400', () => {
-        const result = statusCode(null);
+        const result = respond({ status: null });
 
         expect(result.statusCode).toEqual(400);
       });
 
       it('sets proper error message', () => {
-        const result = statusCode(null);
+        const result = respond({ status: null });
 
         expect(result.response).toEqual(errorMessage);
       });
@@ -50,13 +36,13 @@ describe('Responder', () => {
 
     describe('when input is not a number', () => {
       it('returns 400', () => {
-        const result = statusCode('not-a-number');
+        const result = respond({ status: 'not-a-number' });
 
         expect(result.statusCode).toEqual(400);
       });
 
       it('sets proper error message', () => {
-        const result = statusCode('not-a-number');
+        const result = respond({ status: 'not-a-number' });
 
         expect(result.response).toEqual(errorMessage);
       });
@@ -66,17 +52,19 @@ describe('Responder', () => {
   describe('responseBody', () => {
     describe('when key exists in config', () => {
       it('returns 200', () => {
-        const config = { 'some-key': 'some-value' };
+        const appConfig = { 'some-key': 'some-value' };
+        const responseOptions = { responseKey: 'some-key' };
 
-        const result = responseBody(config, 'some-key');
+        const result = respond(responseOptions, appConfig);
 
         expect(result.statusCode).toEqual(200);
       });
 
       it('returns configured response', () => {
-        const config = { 'some-key': 'some-value' };
+        const appConfig = { 'some-key': 'some-value' };
+        const responseOptions = { responseKey: 'some-key' };
 
-        const result = responseBody(config, 'some-key');
+        const result = respond(responseOptions, appConfig);
 
         expect(result.response).toEqual('some-value');
       });
@@ -84,7 +72,9 @@ describe('Responder', () => {
 
     describe('when config is not supplied', () => {
       it('returns error response', () => {
-        const result = responseBody(null);
+        const responseOptions = { responseKey: 'some-key' };
+
+        const result = respond(responseOptions, null);
 
         expect(result.response).toEqual(
           'Required config for responses not supplied.'
@@ -92,7 +82,9 @@ describe('Responder', () => {
       });
 
       it('returns 400', () => {
-        const result = responseBody(null);
+        const responseOptions = { responseKey: 'some-key' };
+
+        const result = respond(responseOptions, null);
 
         expect(result.statusCode).toEqual(400);
       });
@@ -100,9 +92,10 @@ describe('Responder', () => {
 
     describe('when key is not in config', () => {
       it('returns error response', () => {
-        const config = { 'some-key': 'some-value' };
+        const appConfig = { 'some-key': 'some-value' };
+        const responseOptions = { responseKey: 'some-other-key' };
 
-        const result = responseBody(config, 'some-other-key');
+        const result = respond(responseOptions, appConfig);
 
         expect(result.response).toEqual(
           "Key: 'some-other-key' not found in supplied config."
@@ -110,9 +103,10 @@ describe('Responder', () => {
       });
 
       it('returns 400', () => {
-        const config = { 'some-key': 'some-value' };
+        const appConfig = { 'some-key': 'some-value' };
+        const responseOptions = { responseKey: 'some-other-key' };
 
-        const result = responseBody(config, 'some-other-key');
+        const result = respond(responseOptions, appConfig);
 
         expect(result.statusCode).toEqual(400);
       });
@@ -131,7 +125,7 @@ describe('Responder', () => {
       it('calls callback after timeout', () => {
         const callback = jest.fn();
 
-        delay(1, callback);
+        respond({ delay: 1 }, {}, callback);
 
         jest.advanceTimersByTime(999);
         expect(callback).not.toHaveBeenCalled();
@@ -142,13 +136,13 @@ describe('Responder', () => {
 
     describe('when parameter is not a number', () => {
       it('returns 400', () => {
-        const result = delay('not-a-number');
+        const result = respond({ delay: 'not-a-number' }, {}, () => {});
 
         expect(result.statusCode).toEqual(400);
       });
 
       it('returns error message', () => {
-        const result = delay('not-a-number');
+        const result = respond({ delay: 'not-a-number' }, {}, () => {});
 
         expect(result.response).toEqual(
           'Invalid value for delay: not-a-number'

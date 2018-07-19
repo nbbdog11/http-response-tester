@@ -12,7 +12,7 @@ const statusCode = code => {
   return new Response(statusCodeValue, response);
 };
 
-const responseBody = (config, key) => {
+const responseBody = (key, config) => {
   if (!config) {
     return new Response(400, 'Required config for responses not supplied.');
   }
@@ -32,8 +32,16 @@ const delay = (delayInSeconds, callback) => {
 };
 /* eslint-enable consistent-return */
 
-module.exports = {
-  statusCode,
-  responseBody,
-  delay
+const respond = (responseOptions, appConfig, callback) => {
+  if (responseOptions.responseKey) {
+    return responseBody(responseOptions.responseKey, appConfig);
+  }
+
+  if (responseOptions.delay) {
+    return delay(responseOptions.delay, callback);
+  }
+
+  return statusCode(responseOptions.status);
 };
+
+module.exports = respond;
