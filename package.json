@@ -19,6 +19,7 @@
     "lint": "eslint ./js/**/*.js ./__tests__/**/*.js",
     "start": "node ./js/http-response-tester.js",
     "test": "jest",
+    "test-watch": "jest --watch",
     "get-version": "echo $npm_package_version"
   },
   "repository": {
