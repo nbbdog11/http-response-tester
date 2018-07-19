@@ -1,6 +1,6 @@
 {
   "name": "http-response-tester",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "A simple Express app for specifying the response that you want from the server (status code, response delay, response body).",
   "main": "js/http-response-tester.js",
   "directories": {
