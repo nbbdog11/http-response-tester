@@ -1,5 +1,5 @@
 const supertest = require('supertest');
-const AppSetup = require('../js/app.js');
+const AppSetup = require('../js/app');
 
 let app = null;
 

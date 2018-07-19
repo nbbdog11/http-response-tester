@@ -33,6 +33,12 @@ or
 $ curl -I http://localhost:3000?delay={delayInSeconds}
 ```
 
+Requests can also be composed by supplying multiple query params. Ex:
+```bash
+$ curl -I http://localhost:3000?delay={delayInSeconds}&statusCode={statusCode}
+```
+
+
 You can now supply configured responses for a given key. The configured responses will be read from an environment variable called `HTTP_RESPONSE_TESTER_RESPONSES`. They should be formatted standard JSON.
 To use this feature, send a request like the one below:
 ```bash

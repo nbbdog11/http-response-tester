@@ -1,29 +1,21 @@
 const express = require('express');
-const respond = require('./responder.js');
+const respond = require('./responder');
 
-const sendResponse = (res, response) =>
-  res.status(response.statusCode).end(response.response);
+const sendResponse = (res, { statusCode, response }) =>
+  res.status(statusCode).end(response);
 
 const AppSetup = (configObject = {}) => {
   const app = express();
 
   app.get('/', (req, res) => {
-    if (req.query.statusCode) {
-      const response = respond({ status: req.query.statusCode });
-      sendResponse(res, response);
-    } else if (req.query.delay) {
-      const response = respond(
-        { delay: req.query.delay },
-        {},
-        res.end.bind(res)
-      );
-      if (response) {
-        sendResponse(res, response);
-      }
-    } else if (req.query.body) {
-      const response = respond({ responseKey: req.query.body }, configObject);
-      sendResponse(res, response);
-    }
+    const responseOptions = {
+      status: req.query.statusCode,
+      delay: req.query.delay,
+      responseKey: req.query.body
+    };
+    respond(responseOptions, configObject, response =>
+      sendResponse(res, response)
+    );
   });
 
   return app;

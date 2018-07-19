@@ -1,114 +1,95 @@
 /* eslint-disable no-unused-expressions */
-const respond = require('../js/responder.js');
+const respond = require('../js/responder');
+const Response = require('../js/Response');
 
-describe('Responder', () => {
-  describe('respond', () => {
+describe('respond', () => {
+  const responseCallback = jest.fn();
+  beforeEach(() => {
+    responseCallback.mockReset();
+  });
+
+  describe('status code', () => {
     const errorMessage = 'Please request a valid status code.';
     it('returns input status code', () => {
-      const expectedStatusCode = 200;
+      const statusCode = 200;
+      const expectedResponse = new Response(statusCode, '');
 
-      const result = respond({ status: expectedStatusCode });
+      respond({ status: statusCode }, {}, responseCallback);
 
-      expect(result.statusCode).toEqual(expectedStatusCode);
+      expect(responseCallback).toHaveBeenCalledWith(expectedResponse);
     });
 
     it('handles input strings', () => {
-      const expectedStatusCode = '200';
+      const statusCode = '200';
+      const expectedResponse = new Response(200, '');
 
-      const result = respond({ status: expectedStatusCode });
+      respond({ status: statusCode }, {}, responseCallback);
 
-      expect(result.statusCode).toEqual(200);
+      expect(responseCallback).toHaveBeenCalledWith(expectedResponse);
     });
 
     describe('when input is null', () => {
-      it('returns 400', () => {
-        const result = respond({ status: null });
+      it('returns 400 with proper error message', () => {
+        const statusCode = null;
+        const expectedResponse = new Response(400, errorMessage);
 
-        expect(result.statusCode).toEqual(400);
-      });
+        respond({ status: statusCode }, {}, responseCallback);
 
-      it('sets proper error message', () => {
-        const result = respond({ status: null });
-
-        expect(result.response).toEqual(errorMessage);
+        expect(responseCallback).toHaveBeenCalledWith(expectedResponse);
       });
     });
 
     describe('when input is not a number', () => {
-      it('returns 400', () => {
-        const result = respond({ status: 'not-a-number' });
+      it('returns 400 with proper error message', () => {
+        const statusCode = 'not-a-number';
+        const expectedResponse = new Response(400, errorMessage);
 
-        expect(result.statusCode).toEqual(400);
-      });
+        respond({ status: statusCode }, {}, responseCallback);
 
-      it('sets proper error message', () => {
-        const result = respond({ status: 'not-a-number' });
-
-        expect(result.response).toEqual(errorMessage);
+        expect(responseCallback).toHaveBeenCalledWith(expectedResponse);
       });
     });
   });
 
   describe('responseBody', () => {
     describe('when key exists in config', () => {
-      it('returns 200', () => {
-        const appConfig = { 'some-key': 'some-value' };
+      it('returns 200 with configured response', () => {
         const responseOptions = { responseKey: 'some-key' };
-
-        const result = respond(responseOptions, appConfig);
-
-        expect(result.statusCode).toEqual(200);
-      });
-
-      it('returns configured response', () => {
         const appConfig = { 'some-key': 'some-value' };
-        const responseOptions = { responseKey: 'some-key' };
+        const expectedResponse = new Response(200, 'some-value');
 
-        const result = respond(responseOptions, appConfig);
+        respond(responseOptions, appConfig, responseCallback);
 
-        expect(result.response).toEqual('some-value');
+        expect(responseCallback).toHaveBeenCalledWith(expectedResponse);
       });
     });
 
     describe('when config is not supplied', () => {
-      it('returns error response', () => {
+      it('returns 400 with proper error message', () => {
         const responseOptions = { responseKey: 'some-key' };
-
-        const result = respond(responseOptions, null);
-
-        expect(result.response).toEqual(
+        const expectedResponse = new Response(
+          400,
           'Required config for responses not supplied.'
         );
-      });
 
-      it('returns 400', () => {
-        const responseOptions = { responseKey: 'some-key' };
+        respond(responseOptions, null, responseCallback);
 
-        const result = respond(responseOptions, null);
-
-        expect(result.statusCode).toEqual(400);
+        expect(responseCallback).toHaveBeenCalledWith(expectedResponse);
       });
     });
 
     describe('when key is not in config', () => {
-      it('returns error response', () => {
-        const appConfig = { 'some-key': 'some-value' };
+      it('returns 400 with proper error message', () => {
         const responseOptions = { responseKey: 'some-other-key' };
-
-        const result = respond(responseOptions, appConfig);
-
-        expect(result.response).toEqual(
+        const appConfig = { 'some-key': 'some-value' };
+        const expectedResponse = new Response(
+          400,
           "Key: 'some-other-key' not found in supplied config."
         );
-      });
 
-      it('returns 400', () => {
-        const appConfig = { 'some-key': 'some-value' };
-        const responseOptions = { responseKey: 'some-other-key' };
+        respond(responseOptions, appConfig, responseCallback);
 
-        const result = respond(responseOptions, appConfig);
-
-        expect(result.statusCode).toEqual(400);
+        expect(responseCallback).toHaveBeenCalledWith(expectedResponse);
       });
     });
   });
@@ -123,31 +104,110 @@ describe('Responder', () => {
       });
 
       it('calls callback after timeout', () => {
-        const callback = jest.fn();
+        const expectedResponse = new Response(200, '');
 
-        respond({ delay: 1 }, {}, callback);
+        respond({ delay: 1 }, {}, responseCallback);
 
         jest.advanceTimersByTime(999);
-        expect(callback).not.toHaveBeenCalled();
+        expect(responseCallback).not.toHaveBeenCalled();
         jest.advanceTimersByTime(1);
-        expect(callback).toHaveBeenCalled();
+        expect(responseCallback).toHaveBeenCalledWith(expectedResponse);
       });
     });
 
     describe('when parameter is not a number', () => {
-      it('returns 400', () => {
-        const result = respond({ delay: 'not-a-number' }, {}, () => {});
-
-        expect(result.statusCode).toEqual(400);
-      });
-
-      it('returns error message', () => {
-        const result = respond({ delay: 'not-a-number' }, {}, () => {});
-
-        expect(result.response).toEqual(
+      it('returns 400 with proper error message', () => {
+        const expectedResponse = new Response(
+          400,
           'Invalid value for delay: not-a-number'
         );
+
+        respond({ delay: 'not-a-number' }, {}, responseCallback);
+
+        expect(responseCallback).toHaveBeenCalledWith(expectedResponse);
       });
+    });
+  });
+
+  describe('composed response', () => {
+    beforeAll(() => {
+      jest.useFakeTimers();
+    });
+    beforeEach(() => {
+      jest.clearAllTimers();
+    });
+
+    it('returns requested status code with requested body', () => {
+      const appConfig = {
+        'some-key': 'some-value'
+      };
+      const responseOptions = {
+        status: 204,
+        responseKey: 'some-key'
+      };
+      const expectedResponse = new Response(204, 'some-value');
+
+      respond(responseOptions, appConfig, responseCallback);
+
+      expect(responseCallback).toHaveBeenCalledWith(expectedResponse);
+    });
+
+    it('returns requested status code after requested delay', () => {
+      const responseOptions = {
+        status: 204,
+        delay: 1
+      };
+      const expectedResponse = new Response(204, '');
+
+      const callback = jest.fn();
+
+      respond(responseOptions, {}, callback);
+
+      jest.advanceTimersByTime(999);
+      expect(callback).not.toHaveBeenCalled();
+      jest.advanceTimersByTime(1);
+      expect(callback).toHaveBeenCalledWith(expectedResponse);
+    });
+
+    it('returns requested status code after requested delay with requested body', () => {
+      const responseOptions = {
+        status: 204,
+        delay: 1,
+        responseKey: 'some-key'
+      };
+      const appConfig = {
+        'some-key': 'some-value'
+      };
+      const expectedResponse = new Response(204, 'some-value');
+
+      const callback = jest.fn();
+
+      respond(responseOptions, appConfig, callback);
+
+      jest.advanceTimersByTime(999);
+      expect(callback).not.toHaveBeenCalled();
+      jest.advanceTimersByTime(1);
+      expect(callback).toHaveBeenCalledWith(expectedResponse);
+    });
+
+    it('aggregates multiple errors', () => {
+      const appConfig = {
+        'some-key': 'some-value'
+      };
+      const responseOptions = {
+        status: null,
+        responseKey: 'some-other-key'
+      };
+      const expectedErrors = [
+        'Please request a valid status code.',
+        "Key: 'some-other-key' not found in supplied config."
+      ];
+      const expectedErrorString = expectedErrors.join('\n');
+      const expectedResponse = new Response(400, expectedErrorString);
+
+      respond(responseOptions, appConfig, responseCallback);
+
+      expect(responseCallback).toHaveBeenCalledWith(expectedResponse);
     });
   });
 });

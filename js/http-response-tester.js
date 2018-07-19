@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-const AppSetup = require('./app.js');
 const http = require('http');
+const AppSetup = require('./app');
 
 const tryParseConfiguredResponse = configuredResponseString => {
   try {
