@@ -29,7 +29,7 @@ const buildConfigObject = () => {
 
 const app = AppSetup(buildConfigObject());
 
-http.createServer(app).listen(3000, err => {
+http.createServer(app).listen(process.env.PORT, err => {
   if (err) {
     console.error(err);
     return;
