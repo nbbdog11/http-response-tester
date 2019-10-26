@@ -29,11 +29,12 @@ const buildConfigObject = () => {
 
 const app = AppSetup(buildConfigObject());
 
-http.createServer(app).listen(3000, err => {
+const port = process.env.PORT || 3000;
+http.createServer(app).listen(port, err => {
   if (err) {
     console.error(err);
     return;
   }
 
-  console.log('http-response-tester listening on port 3000');
+  console.log(`http-response-tester listening on port ${port}`);
 });
